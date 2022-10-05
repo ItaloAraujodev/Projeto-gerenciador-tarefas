@@ -11,20 +11,16 @@ app.use(express.json());
 const users = [];
 
 function checksExistsUserAccount(request, response, next) {
-  const { username } = request.headers
-  const filterUser = users.some((element) => element.username === username)
-
-  if(filterUser){
-    next();
-  } else {
-    return response.status(401).json({menssage: 'Usuario não existe'});
-  }
+  
 }
 
 app.post('/users', (request, response) => {
-  // Complete aqui
   const { name, username } = request.body;
-  console.log(name, username);
+  const filterUser = users.find((element) => element.username === username);
+
+  if(filterUser){
+    return response.status(400).json({error: 'Usuario já existe !!'});
+  }
 
   const user = {
     id: uuidv4(),
@@ -33,6 +29,7 @@ app.post('/users', (request, response) => {
     todos: [],
   }
   users.push(user);
+  
   return response.status(201).json(user)
 });
 
